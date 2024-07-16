@@ -8,3 +8,6 @@ Explain the concept of a Service in Kubernetes.
 What is the purpose of a ConfigMap?
 How can you manage sensitive information like passwords or API keys in Kubernetes?
 What is the difference between stateless and a StatefulSet?
+
+
+https://mesutoezdil.medium.com/preparation-for-the-k8s-interviews-4f9111cd01e7
