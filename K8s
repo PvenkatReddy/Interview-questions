@@ -1,0 +1,10 @@
+Why kubernetes?
+What are the main components of Kubernetes architecture?
+What is a Pod in Kubernetes?
+How does Kubernetes achieve high availability?
+What is a Namespace in Kubernetes?
+Explain various deployment strategies in kubernetes. 
+Explain the concept of a Service in Kubernetes.
+What is the purpose of a ConfigMap?
+How can you manage sensitive information like passwords or API keys in Kubernetes?
+What is the difference between stateless and a StatefulSet?
