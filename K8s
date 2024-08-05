@@ -10,4 +10,14 @@ How can you manage sensitive information like passwords or API keys in Kubernete
 What is the difference between stateless and a StatefulSet?
 
 
+1-How eks handles autoscaling
+2-If we manually change the resoruce configuration in aws and then apply terraform destroy will the resource be deleted
+3-Suppose we have created 10 resources from terraform so how to delete the 9 resources out of 10
+4-How to move the terraform state file from one backend to another
+5-What are executors in Jenkins and what criteria would you choose to increase or decrease the executors
+6-Expain the architecture of Docker
+7-In aws how to pre-configure an ec2 instance with all the packages before launching it
+8-How to switch from one version of servers to another in asg in aws
+
+
 https://mesutoezdil.medium.com/preparation-for-the-k8s-interviews-4f9111cd01e7
