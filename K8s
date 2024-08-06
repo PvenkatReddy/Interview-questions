@@ -1,5 +1,12 @@
-Why kubernetes?
+1. Why kubernetes?
+A. Kubernetes helps developers build the 'infrastructure as code' and also helps them manage coding environment configurations as code. Thus, when deploying a new environment, scripts need not be executed continuously. Developers can link the source repository with its configuration files to Kubernetes 
 What are the main components of Kubernetes architecture?
+A. 1.Etcd
+   2.Kubelet
+   3.kube-proxy
+   4.Kube-controle manager
+   5. Kube-API manager
+   6. kube scheduler
 What is a Pod in Kubernetes?
 How does Kubernetes achieve high availability?
 What is a Namespace in Kubernetes?
