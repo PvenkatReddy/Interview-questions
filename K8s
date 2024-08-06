@@ -1,17 +1,47 @@
 1. Why kubernetes?
 A. Kubernetes helps developers build the 'infrastructure as code' and also helps them manage coding environment configurations as code. Thus, when deploying a new environment, scripts need not be executed continuously. Developers can link the source repository with its configuration files to Kubernetes 
 What are the main components of Kubernetes architecture?
-A. 1.Etcd
-   2.Kubelet
-   3.kube-proxy
-   4.Kube-controle manager
+A. 1. Etcd
+   ‍etcd is a distributed key-value store and the primary datastore of Kubernetes. It stores and replicates the Kubernetes cluster state.
+
+   To run etcd, you first need to have a Kubernetes cluster and the command-line tool configured to communicate with said cluster.
+
+   2. Kubelet
+   ‍The kubelet functions as an agent within nodes and is responsible for the runnings of pod cycles within each node. Its functionality is watching for new or changed pod specifications from master nodes and ensuring that pods within the node that it resides in are healthy, and the state of pods matches the pod specification
+   
+   3. kube-proxy
+   Kube-proxy is a network proxy that runs on each node. It maintains network rules, which allow for network communication to Pods from network sessions inside or outside of a cluster. Kube-proxy is used to reach kubernetes services in addition to load balancing of services.
+
+   4. Kube-controle manager
+   ‍The Kubernetes controller manager is a collection of controllers bundled within a single binary and run in a single process. The following controllers are present within this manager:
+
+   NODE CONTROLLER: Responsible for identifying changes in nodes within the cluster
+   REPLICATION CONTROLLER: Responsible for maintaining replications of objects in the cluster (such as replicasets)
+   ENDPOINT CONTROLLER: Responsible for provisioning of endpoints (such as service endpoints)
+   Service account and token controllers: Responsible the management of service accounts within each namespace, as well as API access tokens.
+
    5. Kube-API manager
+   ‍The Kube-API server, a component within the control plane, validates and configures data for API objects, including pods and services. The API Server provides the frontend to the cluster's shared state, which is where all of the other components interact. This means that any access and authentication such as deployments of pods and other Kubernetes API objects via kubectl are handled by this API server.
+
    6. kube scheduler
+   Running as part of the control plane, the kube-scheduler’s responsibility is to assign pods to nodes within your cluster. The scheduler will use information such as compute requests and limits defined within your workload (if any), as well as finding the right node candidate based on its available resources to appropriately assign your workload to a particular node.
+
+<img src="k8sarch.png">
+
 What is a Pod in Kubernetes?
+A. A Kubernetes pod is a collection of one or more Linux® containers, and is the smallest unit of a Kubernetes application.
+
 How does Kubernetes achieve high availability?
+A. Kubernetes achieves high availability through various components and strategies, including pod replication, node-level redundancy, service discovery and load balancing, and the use of persistent volumes and StatefulSets.
+
 What is a Namespace in Kubernetes?
+A. Namespaces are a way to organize clusters into virtual sub-clusters — they can be helpful when different teams or projects share a Kubernetes cluster. Any number of namespaces are supported within a cluster, each logically separated from others but with the ability to communicate with each other.
+
 Explain various deployment strategies in kubernetes. 
+A. A rolling deployment is the default deployment strategy in Kubernetes. It replaces the existing version of pods with a new version, updating pods slowly one by one, without cluster downtime.
+
 Explain the concept of a Service in Kubernetes.
+A. 
 What is the purpose of a ConfigMap?
 How can you manage sensitive information like passwords or API keys in Kubernetes?
 What is the difference between stateless and a StatefulSet?
