@@ -41,33 +41,200 @@ Explain various deployment strategies in kubernetes.
 A. A rolling deployment is the default deployment strategy in Kubernetes. It replaces the existing version of pods with a new version, updating pods slowly one by one, without cluster downtime.
 
 Explain the concept of a Service in Kubernetes.
-A. 
+A. In Kubernetes, a Service is an abstract way to expose an application running on a set of Pods as a network service.
+Imagine you have an app running in multiple containers (Pods) inside a Kubernetes cluster. These Pods might come and go, and their IP addresses can change. But you want a stable way for users or other parts of your system to talk to your app. This is where a Service comes in.
+
 What is the purpose of a ConfigMap?
+A. A ConfigMap in Kubernetes is a way to manage configuration data separately from your application code. It allows you to decouple configuration details (like environment variables, command-line arguments, or config files) from the container images that run your applications.
+
 How can you manage sensitive information like passwords or API keys in Kubernetes?
+A. In Kubernetes, managing sensitive information like passwords, API keys, or other confidential data is done using Secrets. A Secret is similar to a ConfigMap but is specifically designed for storing and handling sensitive data securely.
+
 What is the difference between stateless and a StatefulSet?
+A. In Kubernetes, stateless applications and StatefulSets represent different approaches to managing workloads, particularly in how they handle data and persistent storage.
+
+Stateless Applications:
+Definition: A stateless application does not retain any data or state between requests or sessions. Each request is independent, and the application can handle any request without needing information from previous requests.
+
+Example: A web server serving static files, where each request is handled independently without storing user sessions or data between requests.
+
+Deployment in Kubernetes: Stateless applications are typically managed using Deployments or ReplicaSets. These controllers ensure that the desired number of identical Pods are running. If a Pod dies, it can be replaced without any impact on the application’s functionality.
+
+Characteristics:
+
+Ephemeral Pods: Pods can be created, destroyed, or moved across nodes without any issues.
+Scaling: Scaling up or down is straightforward because no specific Pod instance has any special data or state.
+Load Balancing: Requests can be distributed evenly across all Pods.
+StatefulSet:
+Definition: A StatefulSet is used for managing stateful applications, where each instance (Pod) needs to maintain a persistent state or identity. StatefulSets are designed for applications that require stable, unique network identifiers, persistent storage, and ordered, graceful deployment and scaling.
+
+Example: Databases like MySQL, Cassandra, or any application where each instance needs to maintain its own data or configuration.
+
+Deployment in Kubernetes: StatefulSets manage Pods in a way that each Pod has a unique identity and stable storage. Kubernetes ensures that Pods are deployed in a specific order, and each Pod maintains its identity across rescheduling.
+
+Characteristics:
+
+Stable Network Identity: Each Pod in a StatefulSet gets a unique, stable hostname that persists across rescheduling. For example, if the StatefulSet is named mysql, the Pods might be named mysql-0, mysql-1, etc.
+Persistent Storage: Each Pod can have its own PersistentVolume that stays with it even if the Pod is rescheduled to a different node.
+Ordered, Graceful Deployment: Pods are created, updated, and deleted in a defined order (e.g., mysql-0 is created first, followed by mysql-1, etc.).
+Scaling: When scaling up or down, Pods are added or removed in a specific order, maintaining the application's integrity.
+
 
 
 1-How eks handles autoscaling
+A. Amazon EKS (Elastic Kubernetes Service) handles autoscaling using two main components:
+
+Cluster Autoscaler: Automatically adjusts the number of nodes in your EKS cluster based on the resource needs of your running Pods. If your Pods need more resources than the current nodes can provide, the Cluster Autoscaler will add more nodes.
+Horizontal Pod Autoscaler (HPA): Scales the number of Pods in your deployment based on CPU or memory usage. If your app is experiencing high load, HPA can automatically increase the number of Pods to handle the traffic.
+
 2-If we manually change the resoruce configuration in aws and then apply terraform destroy will the resource be deleted
+A. Yes, terraform destroy will delete all the resources that are managed by the Terraform state file, regardless of any manual changes you’ve made directly in AWS. Terraform relies on the state file to track resources, so if it’s in the state file, it will be destroyed when you run terraform destroy
+
 3-Suppose we have created 10 resources from terraform so how to delete the 9 resources out of 10
+A. To delete 9 out of 10 resources managed by Terraform:
+
+Identify the resources you want to keep and exclude them from deletion. You can do this by:
+Removing or commenting out the configuration for the 9 resources in your Terraform files.
+Running terraform apply to update the state with these changes.
+After this, only the resource you want to keep remains in your configuration and state.
+You can also use terraform destroy -target=<resource_name> to delete specific resources individually by targeting them one by one.
+
 4-How to move the terraform state file from one backend to another
+A. To move the Terraform state file:
+
+Initialize the new backend in your configuration by updating the backend block in your Terraform configuration (e.g., moving from local to S3).
+Run terraform init with the -migrate-state flag, which automatically migrates the existing state to the new backend.
+Example: terraform init -migrate-state
+Terraform will handle moving the state file from the old backend to the new one.
+
 5-What are executors in Jenkins and what criteria would you choose to increase or decrease the executors
+A. Executors in Jenkins are the worker threads that run your jobs on a Jenkins node. Each executor can run one job at a time.
+
+Criteria to Increase Executors:
+High job queue: If many jobs are waiting to run, you may need more executors.
+Resource availability: Ensure the Jenkins node has enough CPU, memory, and disk resources to handle more jobs simultaneously.
+Criteria to Decrease Executors:
+Low job queue: If jobs are rarely waiting, fewer executors may be sufficient.
+Resource contention: If the node is overloaded (high CPU/memory usage), reducing executors can prevent performance issues.
+
 6-Expain the architecture of Docker
+A. Docker Architecture consists of several components:
+
+Docker Client: The command-line tool that users interact with to communicate with the Docker daemon.
+Docker Daemon (dockerd): The background service that manages Docker containers, images, networks, and storage.
+Docker Images: Read-only templates that define how to create a container (e.g., the OS, application code).
+Docker Containers: Lightweight, isolated environments created from Docker images that run applications.
+Docker Registry: A service like Docker Hub where Docker images are stored and shared.
+Docker Engine: Combines the Docker client, daemon, and all the Docker components necessary to run containers.
+
 7-In aws how to pre-configure an ec2 instance with all the packages before launching it
+A. You can pre-configure an EC2 instance with all necessary packages by:
+
+Creating a Custom AMI: Launch an EC2 instance, install all required packages, then create an Amazon Machine Image (AMI) from this instance. You can then launch new instances from this AMI, which will have the packages pre-installed.
+Using User Data: When launching an EC2 instance, you can provide a shell script in the "User Data" field that installs the packages when the instance boots up.
+
 8-How to switch from one version of servers to another in asg in aws
+A. To switch from one version of servers to another in an Auto Scaling Group (ASG):
+
+Create a New Launch Template or Launch Configuration: With the updated server version (AMI).
+Update the ASG: Modify the ASG to use the new launch template or configuration.
+Gradually Replace Instances: Either manually terminate the old instances (the ASG will automatically launch new ones with the updated template), or use instance refresh to replace instances gradually.
 
 
 
 * What are the security practices in AWS?
+A. Key AWS security practices include:
+
+Use IAM Roles and Policies: Assign least-privilege permissions and avoid using root account.
+Enable Multi-Factor Authentication (MFA): Adds an extra layer of security for accessing AWS resources.
+Encrypt Data: Use encryption for data at rest (e.g., EBS volumes, S3) and in transit (e.g., SSL/TLS).
+VPC Security Groups: Control inbound and outbound traffic to your instances.
+Regular Audits: Use AWS CloudTrail, Config, and GuardDuty to monitor and audit your AWS environment.
+
 * What are wild cards in IAM?
+A. In IAM (Identity and Access Management):
+
+Wildcards (e.g., *) are used to grant permissions to multiple resources or actions. For example, s3:* allows all actions on S3, and arn:aws:s3:::examplebucket/* applies to all objects within the examplebucket.
+Use with Caution: Wildcards can simplify policies but should be used carefully to avoid granting excessive permissions.
+
 * How do you establish connection between multiple VPCs and explain the process?
+A. To connect multiple VPCs:
+
+VPC Peering: Directly connect two VPCs. Establish a peering connection and update route tables to allow traffic between them.
+Transit Gateway: A scalable way to connect multiple VPCs via a central hub. Attach each VPC to the Transit Gateway and update route tables.
+VPN or Direct Connect: Use these options if connecting VPCs in different regions or to on-premises networks.
+
 * Explain AWS WAF?
+A. AWS WAF (Web Application Firewall) is a security service that helps protect web applications from common web exploits like SQL injection, cross-site scripting (XSS), and DDoS attacks.
+
+Rules: You create rules to filter web traffic based on IP addresses, HTTP headers, URL strings, and more.
+Protection: WAF works with CloudFront, ALB, and API Gateway to filter malicious traffic before it reaches your application.
+
 * How did you reduce the deployment time in your organization using Terraform?
+A. To reduce deployment time using Terraform:
+
+Modularize Code: Break down infrastructure into reusable modules to avoid duplication and speed up provisioning.
+Use Remote State: Store the Terraform state in a shared location (e.g., S3) to enable collaboration and quicker state management.
+Parallelism: Terraform automatically deploys resources in parallel where possible, speeding up deployment.
+Automate Workflows: Integrate Terraform with CI/CD pipelines for automated and faster deployments.
+
 * Write a Terraform script to scale up EC2 instances automatically?
+A. Here’s a simple Terraform script snippet to automatically scale EC2 instances using an Auto Scaling Group (ASG):
+'''resource "aws_launch_configuration" "example" {
+  name          = "example-lc"
+  image_id      = "ami-12345678"
+  instance_type = "t2.micro"
+}
+
+resource "aws_autoscaling_group" "example" {
+  desired_capacity     = 2
+  max_size             = 5
+  min_size             = 1
+  launch_configuration = aws_launch_configuration.example.id
+  vpc_zone_identifier  = ["subnet-12345678"]
+
+  tag {
+    key                 = "Name"
+    value               = "example-asg"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_policy" "scale_up" {
+  name                   = "scale-up"
+  scaling_adjustment     = 1
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300
+  autoscaling_group_name = aws_autoscaling_group.example.name
+}
+'''
+
 * Can you explain Federation user in Terraform?
+A. Federation in AWS allows users to authenticate to AWS services using external identity providers (e.g., Google, Active Directory).
+In Terraform, you configure federation by setting up an IAM role that trusts the external identity provider, and then granting permissions to users authenticated through this role.
+
 * What is Kubernetes and how it is different from Docker?
+A. Kubernetes: An open-source platform for automating deployment, scaling, and managing containerized applications.
+Docker: A platform to create and run containers, which are lightweight, isolated environments for running applications.
+Difference: Docker handles individual containers, while Kubernetes orchestrates and manages large-scale container deployments across multiple servers.
+
 * Explain the architecture of Kubernetes?
+A. Kubernetes Architecture consists of:
+
+Master Node: Controls the cluster, handling tasks like scheduling and maintaining the desired state.
+Components:
+API Server: Exposes the Kubernetes API.
+Controller Manager: Manages controllers that handle tasks like scaling and updating Pods.
+Scheduler: Assigns Pods to nodes based on resource availability.
+etcd: A key-value store that keeps the cluster state.
+Worker Nodes: Run the application workloads.
+Components:
+Kubelet: An agent that runs on each node to ensure containers are running.
+Kube-proxy: Manages networking for the containers.
+Container Runtime: Runs the containers (e.g., Docker).
+
 * What is Daemon set in Kubernetes?
+A. A DaemonSet ensures that a specific Pod runs on every node in the cluster (or on a subset of nodes). It's used for tasks like running monitoring agents, log collectors, or network plugins that need to operate across the entire cluster. If a new node is added to the cluster, the DaemonSet automatically deploys the Pod on that node.
 
 
 https://mesutoezdil.medium.com/preparation-for-the-k8s-interviews-4f9111cd01e7
