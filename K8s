@@ -57,5 +57,18 @@ What is the difference between stateless and a StatefulSet?
 8-How to switch from one version of servers to another in asg in aws
 
 
+
+* What are the security practices in AWS?
+* What are wild cards in IAM?
+* How do you establish connection between multiple VPCs and explain the process?
+* Explain AWS WAF?
+* How did you reduce the deployment time in your organization using Terraform?
+* Write a Terraform script to scale up EC2 instances automatically?
+* Can you explain Federation user in Terraform?
+* What is Kubernetes and how it is different from Docker?
+* Explain the architecture of Kubernetes?
+* What is Daemon set in Kubernetes?
+
+
 https://mesutoezdil.medium.com/preparation-for-the-k8s-interviews-4f9111cd01e7
 
